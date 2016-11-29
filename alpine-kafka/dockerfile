@@ -1,0 +1,38 @@
+FROM open-jdk
+
+MAINTAINER jicki < jicki@qq.com >
+
+ARG MIRROR=http://apache.fayea.com/
+ARG VERSION=0.8.2.1
+ARG SC_VERSION=2.11
+
+LABEL name="kafka" version=$VERSION
+
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.4/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.4/community" >> /etc/apk/repositories \
+    && apk update
+	
+RUN apk add --no-cache wget bash \
+    && mkdir /opt \
+    && wget -q -O - $MIRROR/kafka/$VERSION/kafka_$SC_VERSION-$VERSION.tgz | tar -xzf - -C /opt \
+    && mv /opt/kafka_$SC_VERSION-$VERSION /opt/kafka \
+    && sed -i 's/num.partitions=1/num.partitions=4/g' /opt/kafka/config/server.properties \
+    && sed -i 's/log.dirs=\/tmp\/kafka-logs/log.dirs=\/opt\/kafka\/logs/g' /opt/kafka/config/server.properties \
+    && echo delete.topic.enable=true >> /opt/kafka/config/server.properties \
+    && echo replica.lag.max.messages=4000 >> /opt/kafka/config/server.properties \
+    && echo replica.lag.time.max.ms=10000 >> /opt/kafka/config/server.properties \
+    && echo num.replica.fetchers=1 >> /opt/kafka/config/server.properties \
+    && sed -i 's/-Xmx1G -Xms1G/-Xmx4G -Xms4G/g' /opt/kafka/bin/kafka-server-start.sh \
+    && mkdir -p /opt/kafka/logs \
+
+EXPOSE 9090
+
+WORKDIR /opt/kafka
+
+VOLUME [ "/opt/kafka/logs"]
+
+COPY ./start.sh /opt/kafka/bin/start.sh
+
+RUN chmod +x /opt/kafka/bin/start.sh
+
+CMD ["/opt/kafka/bin/start.sh"]

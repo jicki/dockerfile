@@ -1,0 +1,39 @@
+FROM open-jdk
+
+MAINTAINER jicki < jicki@qq.com >
+
+ARG MIRROR=http://apache.mirrors.pair.com
+ARG VERSION=3.4.8
+
+LABEL name="zookeeper" version=$VERSION
+
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.4/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.4/community" >> /etc/apk/repositories \
+    && apk update
+
+RUN apk add --no-cache wget bash \
+    && mkdir /opt \
+    && wget -q -O - $MIRROR/zookeeper/zookeeper-$VERSION/zookeeper-$VERSION.tar.gz | tar -xzf - -C /opt \
+    && mv /opt/zookeeper-$VERSION /opt/zookeeper \
+    && cp /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg \
+    && echo 'maxClientCnxns=5000' >> /opt/zookeeper/conf/zoo.cfg \
+    && sed -i 's/dataDir=\/tmp\/zookeeper/dataDir=\/opt\/zookeeper\/data/g' /opt/zookeeper/conf/zoo.cfg \
+    && mkdir -p /tmp/zookeeper \
+    && mkdir -p /opt/zookeeper/data \
+
+ENV NODE_ID=1
+ENV NODES localhost
+
+EXPOSE 2181 2888 3888
+
+WORKDIR /opt/zookeeper
+
+VOLUME ["/opt/zookeeper/conf", "/tmp/zookeeper"]
+
+COPY ./start.sh /opt/zookeeper/bin/start.sh
+
+RUN chmod +x /opt/zookeeper/bin/start.sh
+
+HEALTHCHECK --interval=5s --timeout=10s --retries=12 CMD /opt/zookeeper/bin/zkServer.sh status
+
+CMD ["/opt/zookeeper/bin/start.sh"]
