@@ -9,7 +9,25 @@
 
 ```
 FROM my-php-images
-RUN apk update && apk add --no-cache \
+
+ENV PHPIZE_DEPS \
+                autoconf \
+                file \
+                g++ \
+                gcc \
+                libc-dev \
+                make \
+                pkgconf \
+                re2c
+
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.4/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.4/community" >> /etc/apk/repositories \
+    && apk update
+
+RUN set -xe \
+        && apk add --no-cache --virtual .build-deps \
+           $PHPIZE_DEPS \
+        && apk add --no-cache \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
@@ -30,9 +48,27 @@ RUN apk update && apk add --no-cache \
 
 ```
 FROM my-php-images
-RUN apk update && apk add --no-cache libmemcached-dev \
-    && pecl install memcached \
-    && docker-php-ext-enable memcached
+
+ENV PHPIZE_DEPS \
+                autoconf \
+                file \
+                g++ \
+                gcc \
+                libc-dev \
+                make \
+                pkgconf \
+                re2c
+
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.4/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.4/community" >> /etc/apk/repositories \
+    && apk update
+
+RUN set -xe \
+        && apk add --no-cache --virtual .build-deps \
+           $PHPIZE_DEPS \
+        && apk add --no-cache libmemcached-dev \
+        && pecl install memcached \
+        && docker-php-ext-enable memcached
 ```
 
 
@@ -50,10 +86,27 @@ docker-php-ext-enable
 ```
 FROM my-php-images
 
-RUN curl -fsSL 'https://xcache.lighttpd.net/pub/Releases/3.2.0/xcache-3.2.0.tar.gz' -o xcache.tar.gz \
-    && mkdir -p xcache \
-    && tar -xf xcache.tar.gz -C xcache --strip-components=1 \
-    && rm xcache.tar.gz \
+ENV PHPIZE_DEPS \
+                autoconf \
+                file \
+                g++ \
+                gcc \
+                libc-dev \
+                make \
+                pkgconf \
+                re2c
+
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.4/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.4/community" >> /etc/apk/repositories \
+    && apk update
+
+RUN set -xe \
+        && apk add --no-cache --virtual .build-deps \
+           $PHPIZE_DEPS \
+        && curl -fsSL 'https://xcache.lighttpd.net/pub/Releases/3.2.0/xcache-3.2.0.tar.gz' -o xcache.tar.gz \
+        && mkdir -p xcache \
+        && tar -xf xcache.tar.gz -C xcache --strip-components=1 \
+        && rm xcache.tar.gz \
     && ( \
         cd xcache \
         && phpize \
