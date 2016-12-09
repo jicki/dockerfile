@@ -1,6 +1,18 @@
 
+## 添加 php.ini
+默认不带php.ini
+将自己编译的php.ini 复制到镜像中
 
-一、 安装 php 内置扩展
+
+```
+FROM my-php-images
+COPY ./php.ini /usr/local/etc/php
+
+```
+
+
+
+## 安装 php 内置扩展
 
 1. 系统安装 支持库
 2. 使用 docker-php-ext-install 安装
@@ -34,13 +46,14 @@ RUN set -xe \
         libpng12-dev \
     && docker-php-ext-install -j$(nproc) iconv mcrypt \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd
+    && docker-php-ext-install -j$(nproc) gd \
+	&& apk del .build-deps
 ```
 
 
 
 
-二、安装 pecl 库里面的 扩展
+## 安装 pecl 库里面的 扩展
 
 1. 系统安装 支持库
 2. pecl install 安装扩展
@@ -68,14 +81,15 @@ RUN set -xe \
            $PHPIZE_DEPS \
         && apk add --no-cache libmemcached-dev \
         && pecl install memcached \
-        && docker-php-ext-enable memcached
+        && docker-php-ext-enable memcached \
+	    && apk del .build-deps
 ```
 
 
 
 
 
-三、安装 额外的 扩展
+## 安装 额外的 扩展
 
 1. 下载 扩展包,  
 2. 解压并安装
@@ -115,5 +129,6 @@ RUN set -xe \
         && make install \
     ) \
     && rm -r xcache \
-    && docker-php-ext-enable xcache
+    && docker-php-ext-enable xcache \
+	&& apk del .build-deps
 ```
