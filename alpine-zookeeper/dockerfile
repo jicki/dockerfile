@@ -34,6 +34,4 @@ COPY ./start.sh /opt/zookeeper/bin/start.sh
 
 RUN chmod +x /opt/zookeeper/bin/start.sh
 
-HEALTHCHECK --interval=5s --timeout=10s --retries=12 CMD /opt/zookeeper/bin/zkServer.sh status
-
 CMD ["/opt/zookeeper/bin/start.sh"]
