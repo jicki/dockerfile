@@ -22,10 +22,10 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
 ```
 
 
-# 集群部署, 集群必须配置 hostname
+# 集群部署
 
 ```
-# docker-compose
+# docker-compose  集群必须配置 hostname , 且 hostname 名称必须 集群内可以通信
 
         elasticsearch-1:
                 image: elasticsearch
