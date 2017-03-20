@@ -28,7 +28,7 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
 # docker-compose
 
         elasticsearch-1:
-                image: 172.16.1.26:5000/test/elasticsearch
+                image: elasticsearch
                 networks:
                         network-test:
                                 aliases:
@@ -46,7 +46,7 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 - /opt/upload/elasticsearch-1/logs:/usr/share/elasticsearch/logs
 
         elasticsearch-2:
-                image: 172.16.1.26:5000/test/elasticsearch
+                image: elasticsearch
                 networks:
                         network-test:
                                 aliases:
@@ -64,7 +64,7 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 - /opt/upload/elasticsearch-2/logs:/usr/share/elasticsearch/logs
 
         elasticsearch-3:
-                image: 172.16.1.26:5000/test/elasticsearch
+                image: elasticsearch
                 networks:
                         network-test:
                                 aliases:
