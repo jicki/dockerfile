@@ -28,6 +28,7 @@ cluster.name: $cluster_name
 node.name: "$node_name"
 node.master: true
 node.data: true
+network.publish_host: ${HOSTNAME}
 marvel.agent.enabled: false
 http.basic.enabled: true
 http.basic.user: $web_user
@@ -50,6 +51,7 @@ cluster.name: $cluster_name
 node.name: "$node_name"
 node.master: true
 node.data: true
+network.publish_host: ${HOSTNAME}
 marvel.agent.enabled: false
 http.basic.enabled: true
 http.basic.user: admin
