@@ -21,14 +21,17 @@ fi
 
 echo "cluster_name: $cluster_name"
 echo "node_name: $node_name"
+echo "cluster_list: $cluster_list" 
 
-if  [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$web_user" ] && [ -n "$web_passwd" ] ;then
+if  [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ -n "$web_user" ] && [ -n "$web_passwd" ] ;then
 cat > /usr/share/elasticsearch/config/elasticsearch.yml << EOF
 cluster.name: $cluster_name
 node.name: "$node_name"
 node.master: true
 node.data: true
 network.publish_host: ${HOSTNAME}
+network.host: ${HOSTNAME}
+discovery.zen.ping.unicast.hosts: [$cluster_list]
 marvel.agent.enabled: false
 http.basic.enabled: true
 http.basic.user: $web_user
@@ -45,13 +48,15 @@ http.basic.password: $web_passwd
 action.auto_create_index: false
 index.mapper.dynamic: false
 EOF
-elif [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ ! -n "$web_user" ] && [ ! -n "$web_passwd" ] ;then
+elif [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ ! -n "$web_user" ] && [ ! -n "$web_passwd" ] ;then
 cat > /usr/share/elasticsearch/config/elasticsearch.yml << EOF
 cluster.name: $cluster_name
 node.name: "$node_name"
 node.master: true
 node.data: true
 network.publish_host: ${HOSTNAME}
+network.host: ${HOSTNAME}
+discovery.zen.ping.unicast.hosts: [$cluster_list]
 marvel.agent.enabled: false
 http.basic.enabled: true
 http.basic.user: admin

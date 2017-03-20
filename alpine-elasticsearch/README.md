@@ -10,6 +10,15 @@ docker run -d --name elasticsearch -p 9200:9200 elasticsearch
 # 设置密码
 docker run -d --name elasticsearch -e web_user=jicki -e web_passwd=jicki -p 9200:9200 elasticsearch
 
+
+#集群启动
+
+docker run -d --name elasticsearch-1 -h elasticsearch-1 -e cluster_name=elasticsearch -e node_name=node-1 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e web_user=jicki -e web_passwd=jicki --net=overlay -p 9200:9200 elasticsearch
+
+docker run -d --name elasticsearch-2 -h elasticsearch-2 -e cluster_name=elasticsearch -e node_name=node-2 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e web_user=jicki -e web_passwd=jicki --net=overlay -p 9200:9200 elasticsearch
+
+docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elasticsearch -e node_name=node-3 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e web_user=jicki -e web_passwd=jicki --net=overlay -p 9200:9200 elasticsearch
+
 ```
 
 
@@ -18,52 +27,58 @@ docker run -d --name elasticsearch -e web_user=jicki -e web_passwd=jicki -p 9200
 ```
 # docker-compose
 
-elasticsearch-1:
-        image: elasticsearch
-        networks:
-                network-pro:
-                       aliases:
-                                - elasticsearch
-        container_name: elasticsearch-1
-        environment:
-        - cluster_name = elasticsearch
-	- node_name = node-1
-	- web_user = jicki
-	- web_passwd = jicki
-        volumes:
-        - /opt/upload/elasticsearch-1/data:/usr/share/elasticsearch/data
-        - /opt/upload/elasticsearch-1/logs:/usr/share/elasticsearch/logs
+        elasticsearch-1:
+                image: 172.16.1.26:5000/test/elasticsearch
+                networks:
+                        network-test:
+                                aliases:
+                                        - elasticsearch
+                hostname: elasticsearch-1
+                container_name: elasticsearch-1
+                environment:
+                - cluster_name=elasticsearch
+                - node_name=node-1
+                - web_user=admin
+                - web_passwd=moxian
+                - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
+                volumes:
+                - /opt/upload/elasticsearch-1/data:/usr/share/elasticsearch/data
+                - /opt/upload/elasticsearch-1/logs:/usr/share/elasticsearch/logs
 
-elasticsearch-2:
-        image: elasticsearch
-        networks:
-                network-pro:
-                       aliases:
-                                - elasticsearch
-        container_name: elasticsearch-2
-        environment:
-        - cluster_name = elasticsearch
-        - node_name = node-2
-        - web_user = jicki
-        - web_passwd = jicki
-        volumes:
-        - /opt/upload/elasticsearch-2/data:/usr/share/elasticsearch/data
-        - /opt/upload/elasticsearch-2/logs:/usr/share/elasticsearch/logs
+        elasticsearch-2:
+                image: 172.16.1.26:5000/test/elasticsearch
+                networks:
+                        network-test:
+                                aliases:
+                                        - elasticsearch
+                hostname: elasticsearch-2
+                container_name: elasticsearch-2
+                environment:
+                - cluster_name=elasticsearch
+                - node_name=node-2
+                - web_user=admin
+                - web_passwd=moxian
+                - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
+                volumes:
+                - /opt/upload/elasticsearch-2/data:/usr/share/elasticsearch/data
+                - /opt/upload/elasticsearch-2/logs:/usr/share/elasticsearch/logs
 
-elasticsearch-3:
-        image: elasticsearch
-        networks:
-                network-pro:
-                       aliases:
-                                - elasticsearch
-        container_name: elasticsearch-3
-        environment:
-        - cluster_name = elasticsearch
-        - node_name = node-3
-        - web_user = jicki
-        - web_passwd = jicki
-        volumes:
-        - /opt/upload/elasticsearch-3/data:/usr/share/elasticsearch/data
-        - /opt/upload/elasticsearch-3/logs:/usr/share/elasticsearch/logs
+        elasticsearch-3:
+                image: 172.16.1.26:5000/test/elasticsearch
+                networks:
+                        network-test:
+                                aliases:
+                                        - elasticsearch
+                hostname: elasticsearch-3
+                container_name: elasticsearch-3
+                environment:
+                - cluster_name=elasticsearch
+                - node_name=node-3
+                - web_user=admin
+                - web_passwd=moxian
+                - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
+                volumes:
+                - /opt/upload/elasticsearch-3/data:/usr/share/elasticsearch/data
+                - /opt/upload/elasticsearch-3/logs:/usr/share/elasticsearch/logs
 
 ```
