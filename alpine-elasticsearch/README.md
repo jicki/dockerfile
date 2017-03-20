@@ -11,7 +11,7 @@ docker run -d --name elasticsearch -p 9200:9200 elasticsearch
 docker run -d --name elasticsearch -e web_user=jicki -e web_passwd=jicki -p 9200:9200 elasticsearch
 
 
-#集群启动
+#集群启动 集群必须配置 hostname (-h)
 
 docker run -d --name elasticsearch-1 -h elasticsearch-1 -e cluster_name=elasticsearch -e node_name=node-1 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e web_user=jicki -e web_passwd=jicki --net=overlay -p 9200:9200 elasticsearch
 
@@ -22,7 +22,7 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
 ```
 
 
-# 集群部署
+# 集群部署, 集群必须配置 hostname
 
 ```
 # docker-compose
@@ -38,8 +38,8 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 environment:
                 - cluster_name=elasticsearch
                 - node_name=node-1
-                - web_user=admin
-                - web_passwd=moxian
+                - web_user=jicki
+                - web_passwd=jicki
                 - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
                 volumes:
                 - /opt/upload/elasticsearch-1/data:/usr/share/elasticsearch/data
@@ -56,8 +56,8 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 environment:
                 - cluster_name=elasticsearch
                 - node_name=node-2
-                - web_user=admin
-                - web_passwd=moxian
+                - web_user=jicki
+                - web_passwd=jicki
                 - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
                 volumes:
                 - /opt/upload/elasticsearch-2/data:/usr/share/elasticsearch/data
@@ -74,8 +74,8 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 environment:
                 - cluster_name=elasticsearch
                 - node_name=node-3
-                - web_user=admin
-                - web_passwd=moxian
+                - web_user=jicki
+                - web_passwd=jicki
                 - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
                 volumes:
                 - /opt/upload/elasticsearch-3/data:/usr/share/elasticsearch/data
