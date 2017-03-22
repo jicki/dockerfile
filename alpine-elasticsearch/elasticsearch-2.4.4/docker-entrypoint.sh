@@ -19,12 +19,17 @@ if [ "$1" = 'elasticsearch' -a "$(id -u)" = '0' ]; then
 	#exec su-exec elasticsearch "$BASH_SOURCE" "$@"
 fi
 
-echo "cluster_name: $cluster_name"
-echo "node_name: $node_name"
-echo "cluster_list: $cluster_list" 
-master_minimum=1
+echo "----------------ENV------------------------"
 
-if  [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ];then
+	echo "cluster_name: $cluster_name"
+	echo "node_name: $node_name"
+	echo "cluster_list: $cluster_list" 
+	echo "master_minimum: $master_minimum"
+
+echo "----------------ENV------------------------"
+
+
+if  [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ -n "$master_minimum" ];then
 cat > /usr/share/elasticsearch/config/elasticsearch.yml << EOF
 cluster.name: $cluster_name
 node.name: "$node_name"
