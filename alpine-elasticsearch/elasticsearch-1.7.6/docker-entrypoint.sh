@@ -19,11 +19,16 @@ if [ "$1" = 'elasticsearch' -a "$(id -u)" = '0' ]; then
 	#exec su-exec elasticsearch "$BASH_SOURCE" "$@"
 fi
 
-echo "cluster_name: $cluster_name"
-echo "node_name: $node_name"
-echo "cluster_list: $cluster_list" 
+echo "----------------ENV------------------------"
 
-if  [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ -n "$web_user" ] && [ -n "$web_passwd" ] ;then
+	echo "cluster_name: $cluster_name"
+	echo "node_name: $node_name"
+	echo "cluster_list: $cluster_list" 
+	echo "master_minimum: $master_minimum"
+
+echo "----------------ENV------------------------"
+
+if  [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ -n "$web_user" ] && [ -n "$web_passwd" ] && [ -n "$master_minimum" ];then
 cat > /usr/share/elasticsearch/config/elasticsearch.yml << EOF
 cluster.name: $cluster_name
 node.name: "$node_name"
@@ -32,6 +37,7 @@ node.data: true
 network.publish_host: ${HOSTNAME}
 network.host: ${HOSTNAME}
 discovery.zen.ping.unicast.hosts: [$cluster_list]
+discovery.zen.minimum_master_nodes: $[$master_minimum/2+1]
 marvel.agent.enabled: false
 http.basic.enabled: true
 http.basic.user: $web_user
@@ -39,7 +45,7 @@ http.basic.password: $web_passwd
 action.auto_create_index: false
 index.mapper.dynamic: false
 EOF
-elif [ ! -n "$cluster_name" ] && [ ! -n "$node_name" ] && [ -n "$web_user" ] && [ -n "$web_passwd" ];then
+elif [ ! -n "$cluster_name" ] && [ ! -n "$node_name" ] && [ ! -n "$master_minimum" ] && [ -n "$web_user" ] && [ -n "$web_passwd" ];then
 cat > /usr/share/elasticsearch/config/elasticsearch.yml << EOF
 marvel.agent.enabled: false
 http.basic.enabled: true
@@ -48,7 +54,7 @@ http.basic.password: $web_passwd
 action.auto_create_index: false
 index.mapper.dynamic: false
 EOF
-elif [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ ! -n "$web_user" ] && [ ! -n "$web_passwd" ] ;then
+elif [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ -n "$master_minimum" ] && [ ! -n "$web_user" ] && [ ! -n "$web_passwd" ] ;then
 cat > /usr/share/elasticsearch/config/elasticsearch.yml << EOF
 cluster.name: $cluster_name
 node.name: "$node_name"
@@ -57,6 +63,7 @@ node.data: true
 network.publish_host: ${HOSTNAME}
 network.host: ${HOSTNAME}
 discovery.zen.ping.unicast.hosts: [$cluster_list]
+discovery.zen.minimum_master_nodes: $[$master_minimum/2+1]
 marvel.agent.enabled: false
 http.basic.enabled: true
 http.basic.user: admin
