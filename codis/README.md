@@ -75,28 +75,6 @@ docker run -d --name codis-server -e CODIS_TYPE=codis_server -e MAXMEMORY=10gb c
 
 ```
 
-## codis-sentinel 使用
-
-```
-# 启动参数
-CODIS_TYPE # 启动类型
-
-
-```
-
-
-```
-# 单机启动命令
-
-docker run -d --name codis-sentinel -e CODIS_TYPE=codis_sentinel codis
-
-
-# 挂载日志目录
-
--v local:/opt/local/codis/logs
-
-```
-
 
 ## codis-fe 使用
 
