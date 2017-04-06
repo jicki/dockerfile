@@ -1,0 +1,27 @@
+FROM golang:1.5-centos
+
+MAINTAINER jicki
+
+RUN yum -y install gcc git autoconf make && mkdir -p /opt/local/codis/src/github.com/CodisLabs 
+
+ENV GOPATH /opt/local/codis
+
+RUN set -ex \
+        && cd $GOPATH/src/github.com/CodisLabs \
+        && git clone https://github.com/CodisLabs/codis.git -b release3.1 \
+        && cd $GOPATH/src/github.com/CodisLabs/codis && make && make -j -C extern/redis-3.2.4/ \
+        && mkdir -p /opt/local/codis/{bin,logs,data}/ \
+        && cp -rf $GOPATH/src/github.com/CodisLabs/codis/bin/* /opt/local/codis/bin \
+        && cp -rf $GOPATH/src/github.com/CodisLabs/codis/config /opt/local/codis/
+
+COPY docker-entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+VOLUME /opt/local/codis/logs /opt/local/codis/data
+
+ADD redis.conf /opt/local/codis/config
+
+EXPOSE 18080 11080 19000 8080 6379
+
+CMD ["/entrypoint.sh"]
