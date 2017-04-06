@@ -166,28 +166,6 @@ echo "--------------------------------------------------------------------------
 CMD="/opt/local/codis/bin/codis-server /opt/local/codis/config/redis.conf"
 
 
-elif [ $CODIS_TYPE = "codis_sentinel" ];
-then
-cat > /opt/local/codis/config/sentinel.conf << EOF
-port 26380
-logfile "/opt/local/codis/logs/sentinel.log"
-EOF
-
-cat > /opt/local/codis/config/sentinel_notify.sh << EOF
-#!/bin/bash
-
-echo $@ >> /opt/local/codis/logs/sentinel_notify.log
-EOF
-
-cat > /opt/local/codis/config/sentinel_reconfig.sh << EOF
-#!/bin/bash
-
-echo $@ >> /opt/local/codis/logs/sentinel_reconfig.log
-EOF
-
-
-CMD="/opt/local/codis/bin/codis-server /opt/local/codis/config/sentinel.conf"
-
 elif [ $CODIS_TYPE = "codis_fe" ];
 then
 
