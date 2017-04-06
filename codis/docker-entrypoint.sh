@@ -33,10 +33,10 @@ admin_addr = "0.0.0.0:18080"
 # Set configs for redis sentinel.
 sentinel_quorum = 2
 sentinel_parallel_syncs = 1
-sentinel_down_after = "30s"
-sentinel_failover_timeout = "5m"
-sentinel_notification_script = ""
-sentinel_client_reconfig_script = ""
+sentinel_down_after = "10s"
+sentinel_failover_timeout = "10m"
+sentinel_notification_script = "/opt/local/codis/config/sentinel_notify.sh"
+sentinel_client_reconfig_script = "/opt/local/codis/config/sentinel_reconfig.sh"
 EOF
  
 echo "-------------------------------------------------------------------------------"
@@ -146,7 +146,7 @@ metrics_report_influxdb_database = ""
 EOF
 
 echo "-------------------------------------------------------------------------------"
-echo "proxy.toml file"
+echo "------------------------------proxy.toml file----------------------------------"
 cat /opt/local/codis/config/proxy.toml
 echo "-------------------------------------------------------------------------------"
 
@@ -158,7 +158,35 @@ echo "maxmemory : ${MAXMEMORY}"
 
 sed -i "s/^maxmemory.*$/maxmemory ${MAXMEMORY}/g" /opt/local/codis/config/redis.conf
 
+echo "-------------------------------------------------------------------------------"
+echo "-----------------------------redis.conf file-----------------------------------"
+cat /opt/local/codis/config/redis.conf
+echo "-------------------------------------------------------------------------------"
+
 CMD="/opt/local/codis/bin/codis-server /opt/local/codis/config/redis.conf"
+
+
+elif [ $CODIS_TYPE = "codis_sentinel" ];
+then
+cat > /opt/local/codis/config/sentinel.conf << EOF
+port 26380
+logfile "/opt/local/codis/logs/sentinel.log"
+EOF
+
+cat > /opt/local/codis/config/sentinel_notify.sh << EOF
+#!/bin/bash
+
+echo $@ >> /opt/local/codis/logs/sentinel_notify.log
+EOF
+
+cat > /opt/local/codis/config/sentinel_reconfig.sh << EOF
+#!/bin/bash
+
+echo $@ >> /opt/local/codis/logs/sentinel_reconfig.log
+EOF
+
+
+CMD="/opt/local/codis/bin/codis-server /opt/local/codis/config/sentinel.conf"
 
 elif [ $CODIS_TYPE = "codis_fe" ];
 then

@@ -22,6 +22,6 @@ VOLUME /opt/local/codis/logs /opt/local/codis/data
 
 ADD redis.conf /opt/local/codis/config
 
-EXPOSE 18080 11080 19000 8080 6379
+EXPOSE 26380 18080 11080 19000 8080 6379
 
 CMD ["/entrypoint.sh"]
