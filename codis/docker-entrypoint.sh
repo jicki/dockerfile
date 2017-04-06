@@ -165,6 +165,22 @@ echo "--------------------------------------------------------------------------
 
 CMD="/opt/local/codis/bin/codis-server /opt/local/codis/config/redis.conf"
 
+elif [ $CODIS_TYPE = "codis_sentinel" ];
+then
+
+cat > /opt/local/codis/config/sentinel.conf << EOF
+bind 0.0.0.0
+protected-mode yes
+port 26380
+logfile "/opt/local/codis/logs/sentinel.log"
+EOF
+
+echo "-------------------------------------------------------------------------------"
+echo "-----------------------------sentinel.conf file--------------------------------"
+cat /opt/local/codis/config/sentinel.conf
+echo "-------------------------------------------------------------------------------"
+
+CMD="/opt/local/codis/bin/codis-server /opt/local/codis/config/sentinel.conf --sentinel"
 
 elif [ $CODIS_TYPE = "codis_fe" ];
 then
