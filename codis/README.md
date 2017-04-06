@@ -71,6 +71,7 @@ docker run -d --name codis-server -e CODIS_TYPE=codis_server -e MAXMEMORY=10gb c
 # 挂载日志目录
 
 -v local:/opt/local/codis/logs
+-v local:/opt/local/codis/data
 
 ```
 

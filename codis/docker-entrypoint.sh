@@ -165,7 +165,7 @@ then
 
 echo "zookeeper : ${coord_list}"
 
-CMD="/opt/local/codis/bin/codis-fe --ncpu=4 --log=/opt/local/codis/logs/fe.log --log-level=WARN --zookeeper=${coord_list} --listen=127.0.0.1:8080"
+CMD="/opt/local/codis/bin/codis-fe --ncpu=4 --log=/opt/local/codis/logs/fe.log --log-level=WARN --zookeeper=${coord_list} --listen=0.0.0.0:8080"
 
 else
   echo " [Error] CODIS_TYPE Null OR MAXMEMORY Null"
