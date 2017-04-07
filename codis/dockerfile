@@ -20,7 +20,10 @@ RUN chmod +x /entrypoint.sh
 
 VOLUME /opt/local/codis/logs /opt/local/codis/data
 
+ADD script /opt/local/codis
 ADD redis.conf /opt/local/codis/config
+
+RUN chmod +x /opt/local/codis/script/*.sh
 
 EXPOSE 26380 18080 11080 19000 8080 6379
 

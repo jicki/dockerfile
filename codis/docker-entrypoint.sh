@@ -35,8 +35,8 @@ sentinel_quorum = 2
 sentinel_parallel_syncs = 1
 sentinel_down_after = "10s"
 sentinel_failover_timeout = "10m"
-sentinel_notification_script = "/opt/local/codis/config/sentinel_notify.sh"
-sentinel_client_reconfig_script = "/opt/local/codis/config/sentinel_reconfig.sh"
+sentinel_notification_script = "/opt/local/codis/script/sentinel_notify.sh"
+sentinel_client_reconfig_script = "/opt/local/codis/script/sentinel_reconfig.sh"
 EOF
  
 echo "-------------------------------------------------------------------------------"
