@@ -1,4 +1,4 @@
-FROM golang:1.5-centos
+FROM golang:1.7-centos
 
 MAINTAINER jicki
 
@@ -8,9 +8,9 @@ ENV GOPATH /opt/local/codis
 
 RUN set -ex \
         && cd $GOPATH/src/github.com/CodisLabs \
-        && git clone https://github.com/CodisLabs/codis.git -b release3.1 \
-        && cd $GOPATH/src/github.com/CodisLabs/codis && make && make -j -C extern/redis-3.2.4/ \
-        && mkdir -p /opt/local/codis/{bin,logs,data}/ \
+        && git clone https://github.com/CodisLabs/codis.git \
+        && cd $GOPATH/src/github.com/CodisLabs/codis && make && make -j -C extern/redis-3.2.8/ \
+        && mkdir -p /opt/local/codis/{bin,logs,data,script}/ \
         && cp -rf $GOPATH/src/github.com/CodisLabs/codis/bin/* /opt/local/codis/bin \
         && cp -rf $GOPATH/src/github.com/CodisLabs/codis/config /opt/local/codis/
 
@@ -20,7 +20,9 @@ RUN chmod +x /entrypoint.sh
 
 VOLUME /opt/local/codis/logs /opt/local/codis/data
 
-ADD script /opt/local/codis
+COPY sentinel_notify.sh /opt/local/codis/script
+COPY sentinel_reconfig.sh /opt/local/codis/script
+
 ADD redis.conf /opt/local/codis/config
 
 RUN chmod +x /opt/local/codis/script/*.sh
