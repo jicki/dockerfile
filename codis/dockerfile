@@ -5,6 +5,7 @@ MAINTAINER jicki
 RUN yum -y install gcc git autoconf make && mkdir -p /opt/local/codis/src/github.com/CodisLabs 
 
 ENV GOPATH /opt/local/codis
+ENV MAXMEMORY 1gb
 
 RUN set -ex \
         && cd $GOPATH/src/github.com/CodisLabs \

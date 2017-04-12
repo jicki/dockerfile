@@ -152,7 +152,7 @@ echo "--------------------------------------------------------------------------
 
 CMD="/opt/local/codis/bin/codis-proxy --ncpu=4 --config=/opt/local/codis/config/proxy.toml --log=/opt/local/codis/logs/proxy.log --log-level=WARN"
 
-elif [ $CODIS_TYPE = "codis_server" ] && [ -n "${MAXMEMORY}" ];
+elif [ $CODIS_TYPE = "codis_server" ];
 then
 echo "maxmemory : ${MAXMEMORY}"
 
