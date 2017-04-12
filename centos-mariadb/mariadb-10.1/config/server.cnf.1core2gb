@@ -1,0 +1,97 @@
+[mysql]
+
+# This config is tuned for a 4xCore, 8GB Ram DB Host
+
+# CLIENT #
+port                           = 3306
+socket                         = /var/lib/mysql/mysql.sock
+
+[mysqld]
+
+# GENERAL #
+user                           = mysql
+default-storage-engine         = InnoDB
+socket                         = /var/lib/mysql/mysql.sock
+pid-file                       = /var/lib/mysql/mysql.pid
+bind-address                   = 0.0.0.0
+
+# CHARACTER SET #
+collation-server               = utf8_unicode_ci 
+init-connect                   = 'SET NAMES utf8'
+character-set-server           = utf8
+
+
+# MyISAM #
+key-buffer-size                = 32M
+myisam-recover-options         = FORCE,BACKUP
+
+# SAFETY #
+skip-host-cache
+skip-name-resolve
+max-allowed-packet             = 16M
+max-connect-errors             = 1000000
+sql-mode                       = STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY
+sysdate-is-now                 = 1
+innodb                         = FORCE
+innodb-strict-mode             = 1
+innodb_file_per_table          = 1
+# Mandatory per https://github.com/codership/documentation/issues/25
+innodb-autoinc-lock-mode       = 2
+# Per https://www.percona.com/blog/2006/08/04/innodb-double-write/
+innodb-doublewrite             = 1
+# Not fully ACID compliant, up to 1sec transaction loss in the event of total cluster failure (across both regions)
+# Enabled for performance per https://mariadb.com/kb/en/mariadb/getting-started-with-mariadb-galera-cluster/
+innodb_flush_log_at_trx_commit = 0
+
+# DATA STORAGE #
+datadir                        = /var/lib/mysql
+
+# BINARY LOGGING #
+log-bin                        = /var/lib/mysql/mysql-bin
+expire-logs-days               = 14
+# Disabling for performance per http://severalnines.com/blog/9-tips-going-production-galera-cluster-mysql
+sync-binlog                    = 0
+# Required for Galera
+binlog-format                  = row
+
+# CACHES AND LIMITS #
+tmp-table-size                 = 32M
+max-heap-table-size            = 32M
+# Re-enabling as now works with Maria 10.1.2
+query-cache-type               = 1
+query-cache-limit              = 2M
+query-cache-size               = 64M
+max-connections                = 500
+thread-cache-size              = 50
+open-files-limit               = 65535
+table-definition-cache         = 4096
+table-open-cache               = 4096
+
+# INNODB #
+innodb-flush-method            = O_DIRECT
+innodb-log-files-in-group      = 2
+innodb-log-file-size           = 128M
+innodb-flush-log-at-trx-commit = 1
+innodb-file-per-table          = 1
+# 80% Memory is default reco.
+# Need to re-evaluate when DB size grows
+innodb-buffer-pool-size        = 1456M
+innodb_file_format             = Barracuda
+
+
+# LOGGING #
+log-error                      = /dev/stdout
+slow-query-log-file            = /dev/stdout
+log-queries-not-using-indexes  = 1
+slow-query-log                 = 1
+
+# GALERA SETTINGS #
+[galera]
+wsrep_on                       = ON
+wsrep_provider                 = /usr/lib64/galera/libgalera_smm.so
+wsrep_sst_method               = rsync
+wsrep_slave_threads            = 4
+innodb-flush-log-at-trx-commit = 2
+
+# MYISAM REPLICATION SUPPORT #
+wsrep_replicate_myisam         = ON
