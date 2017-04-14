@@ -15,6 +15,8 @@ RUN yum -y update && yum clean all && yum -y install epel-release && \
     mkdir /docker-entrypoint-initdb.d
 
 RUN rm -rf /var/lib/mysql && mkdir /var/lib/mysql
+RUN localedef -i zh_CN -c -f UTF-8 zh_CN.UTF-8
+RUN ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 COPY config/server.cnf /etc/my.cnf.d/server.cnf
 COPY scripts/docker-entrypoint.sh /docker-entrypoint.sh

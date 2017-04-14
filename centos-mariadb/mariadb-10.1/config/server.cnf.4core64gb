@@ -1,0 +1,123 @@
+[mysql]
+
+# This config is tuned for a 4xCore, 8GB Ram DB Host
+
+# CLIENT #
+port                           = 3306
+socket                         = /var/lib/mysql/mysql.sock
+
+[mysqld]
+
+# GENERAL #
+user                           = mysql
+default-storage-engine         = InnoDB
+socket                         = /var/lib/mysql/mysql.sock
+pid-file                       = /var/lib/mysql/mysql.pid
+bind-address                   = 0.0.0.0
+
+# CHARACTER SET #
+character-set-server           = utf8mb4
+collation-server               = utf8mb4_unicode_ci
+skip-character-set-client-handshake
+init_connect                   = 'SET collation_connection = utf8mb4_unicode_ci'
+init_connect                   = 'SET NAMES utf8mb4
+
+# MyISAM #
+#key-buffer-size                = 64M
+myisam-recover-options         = FORCE,BACKUP
+
+# SAFETY #
+#skip-host-cache
+#skip-name-resolve
+#max-allowed-packet             = 16M
+max-connect-errors             = 1000000
+#sql-mode                       = STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY
+#sysdate-is-now                 = 1
+innodb                         = FORCE
+#innodb-strict-mode             = 1
+innodb_file_per_table          = 1
+# Mandatory per https://github.com/codership/documentation/issues/25
+innodb-autoinc-lock-mode       = 2
+# Per https://www.percona.com/blog/2006/08/04/innodb-double-write/
+innodb-doublewrite             = 1
+# Not fully ACID compliant, up to 1sec transaction loss in the event of total cluster failure (across both regions)
+# Enabled for performance per https://mariadb.com/kb/en/mariadb/getting-started-with-mariadb-galera-cluster/
+innodb_flush_log_at_trx_commit = 0
+
+#
+log_bin_trust_function_creators = 1
+lower_case_table_names = 1
+
+# DATA STORAGE #
+datadir                        = /var/lib/mysql
+
+# BINARY LOGGING #
+log-bin                        = /var/lib/mysql/mysql-bin
+#expire-logs-days               = 14
+# Disabling for performance per http://severalnines.com/blog/9-tips-going-production-galera-cluster-mysql
+sync-binlog                    = 0
+# Required for Galera
+binlog-format                  = row
+
+# CACHES AND LIMITS #
+tmp-table-size                 = 32M
+max-heap-table-size            = 32M
+# Re-enabling as now works with Maria 10.1.2
+query-cache-type               = 1
+query-cache-limit              = 8M
+query-cache-size               = 512M
+max-connections                = 1500
+thread-cache-size              = 120
+open-files-limit               = 65535
+table-definition-cache         = 4096
+table-open-cache               = 4096
+
+#add
+#query-cache-type=1                              #查询缓存  (0 = off、1 = on、2 = demand)
+performance-schema=0                            #收集数据库服务器性能参数
+net-read-timeout=3600                           #连接繁忙阶段（query）起作用
+net-write-timeout=3600                          #连接繁忙阶段（query）起作用
+key-buffer-size = 32M                           #设置索引块缓存大小
+max-allowed-packet = 128M                       #通信缓冲大小
+#able-open-cache = 1024                         #table高速缓存的数量
+sort-buffer-size = 12M                          #每个connection（session）第一次需要使用这个buffer的时候，一次性分配设置的内存
+read-buffer-size = 8M                           #顺序读取数据缓冲区使用内存
+read-rnd-buffer-size = 32M                      #随机读取数据缓冲区使用内存
+myisam-sort-buffer-size = 32M                   #MyISAM表发生变化时重新排序所需的缓冲
+#thread-cache-size = 120                         #重新利用保存在缓存中线程的数量
+#query-cache-size = 64M
+join-buffer-size = 8M                           #Join操作使用内存
+bulk-insert-buffer-size = 32M                   #批量插入数据缓存大小
+delay-key-write=ON                              #在表关闭之前，将对表的update操作指跟新数据到磁盘，而不更新索引到磁盘，把对索引的更改记录在内存。这样MyISAM表可以使索引更新更快。在关闭表的时候一起更新索引到磁盘
+delayed-insert-limit=4000
+delayed-insert-timeout=600
+delayed-queue-size=4000
+
+# INNODB #
+innodb-flush-method            = O_DIRECT
+innodb-log-files-in-group      = 2
+innodb-log-file-size           = 512M
+innodb-flush-log-at-trx-commit = 1
+innodb-file-per-table          = 1
+# 80% Memory is default reco.
+# Need to re-evaluate when DB size grows
+innodb-buffer-pool-size        = 12G
+innodb_file_format             = Barracuda
+
+
+# LOGGING #
+log-error                      = /dev/stdout
+slow-query-log-file            = /dev/stdout
+log-queries-not-using-indexes  = 1
+slow-query-log                 = 1
+
+# GALERA SETTINGS #
+[galera]
+wsrep_on                       = ON
+wsrep_provider                 = /usr/lib64/galera/libgalera_smm.so
+wsrep_sst_method               = rsync
+wsrep_slave_threads            = 4
+innodb-flush-log-at-trx-commit = 2
+
+# MYISAM REPLICATION SUPPORT #
+wsrep_replicate_myisam         = ON
