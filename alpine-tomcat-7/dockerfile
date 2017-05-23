@@ -1,0 +1,47 @@
+FROM oracle-jdk-8
+
+MAINTAINER ict@moxiangroup.com 
+ 
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.5/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.5/community" >> /etc/apk/repositories \
+    && apk update
+
+RUN apk add --no-cache wget bash tzdata gcc g++ make apr apr-dev \
+    && mkdir -p /opt/local \
+    && wget -q -O - http://mirrors.hust.edu.cn/apache/tomcat/tomcat-7/v7.0.78/bin/apache-tomcat-7.0.78.tar.gz | tar -xzvf - -C /opt/local/ \
+    && mv /opt/local/apache-tomcat-* /opt/local/tomcat \
+    && cp -rf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+ENV TOMCAT_HOME=/opt/local/tomcat
+
+ADD cronolog-1.6.2.tar.gz /tmp/
+
+RUN cd /tmp/cronolog-1.6.2 \
+    && ./configure \
+    && make \
+    && make install \
+    && rm -rf /tmp/cronolog-1.6.2 \
+    && cd /opt/local/tomcat/bin/ \
+    && tar zxvf tomcat-native.tar.gz \
+    && cd tomcat-native-*/native/ \
+    && find / -name apr* \
+    && ./configure --with-apr=/usr/bin/apr-1-config \
+    && make \
+    && make install
+
+RUN rm -rf /opt/local/tomcat/conf/server.xml \
+    && rm -rf /opt/local/tomcat/bin/catalina.sh
+
+ADD conf/catalina.sh /opt/local/tomcat/bin/
+ADD conf/server.xml /opt/local/tomcat/conf/
+RUN chmod +x /opt/local/tomcat/bin/catalina.sh
+
+WORKDIR /opt/local/tomcat
+
+COPY ./docker-entrypoint.sh /
+
+RUN chmod +x /docker-entrypoint.sh
+
+EXPOSE 8080
+
+CMD ["/docker-entrypoint.sh"]
