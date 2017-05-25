@@ -1,18 +1,19 @@
 FROM alpine:glibc
 
 ENV JAVA_VERSION=8 \
-    JAVA_UPDATE=102 \
-    JAVA_BUILD=14 \
+    JAVA_UPDATE=131 \
+    JAVA_BUILD=11 \
+    JAVA_PATH=d54c1d3a095b4ff2b6607d096fa80163 \
     JAVA_HOME="/usr/lib/jvm/default-jvm"
 
-RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.4/main" > /etc/apk/repositories \
-    && echo "https://mirrors.ustc.edu.cn/alpine/v3.4/community" >> /etc/apk/repositories \
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.5/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.5/community" >> /etc/apk/repositories \
     && apk update
-	
-RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates && \
+
+RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip && \
     cd "/tmp" && \
     wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
-        "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
+        "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/${JAVA_PATH}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     tar -xzf "jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     mkdir -p "/usr/lib/jvm" && \
     mv "/tmp/jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE}" "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
@@ -38,5 +39,23 @@ RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates && \
            "$JAVA_HOME/jre/lib/amd64/libgstreamer-lite.so" \
            "$JAVA_HOME/jre/lib/amd64/"libjavafx*.so \
            "$JAVA_HOME/jre/lib/amd64/"libjfx*.so && \
+    rm -rf "$JAVA_HOME/jre/bin/jjs" \
+           "$JAVA_HOME/jre/bin/keytool" \
+           "$JAVA_HOME/jre/bin/orbd" \
+           "$JAVA_HOME/jre/bin/pack200" \
+           "$JAVA_HOME/jre/bin/policytool" \
+           "$JAVA_HOME/jre/bin/rmid" \
+           "$JAVA_HOME/jre/bin/rmiregistry" \
+           "$JAVA_HOME/jre/bin/servertool" \
+           "$JAVA_HOME/jre/bin/tnameserv" \
+           "$JAVA_HOME/jre/bin/unpack200" \
+           "$JAVA_HOME/jre/lib/ext/nashorn.jar" \
+           "$JAVA_HOME/jre/lib/jfr.jar" \
+           "$JAVA_HOME/jre/lib/jfr" \
+           "$JAVA_HOME/jre/lib/oblique-fonts" && \
+    wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
+        "http://download.oracle.com/otn-pub/java/jce/${JAVA_VERSION}/jce_policy-${JAVA_VERSION}.zip" && \
+    unzip -jo -d "${JAVA_HOME}/jre/lib/security" "jce_policy-${JAVA_VERSION}.zip" && \
+    rm "${JAVA_HOME}/jre/lib/security/README.txt" && \
     apk del build-dependencies && \
     rm "/tmp/"*
