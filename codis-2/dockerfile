@@ -1,4 +1,4 @@
-FROM 172.16.1.59/library/golang:1.7
+FROM centos-golang:1.7
 
 MAINTAINER jicki
 
