@@ -11,6 +11,14 @@ prd_auth       # Codis 验证，必须与其他proxy一致，可以为空
 coord_name     # 服务选择 zookeeper 或者 ETCD
 coord_list     # zk/etcd 集群地址，如: 127.0.0.1:2181
 prd_dashboard  # dashboard 名称
+POD_IP         # K8S 中获取 POD IP
+
+          env:
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+
 
 ```
 
@@ -39,6 +47,13 @@ coord_name     # 服务选择 zookeeper 或者 ETCD
 coord_list     # zk/etcd 集群地址，如: 127.0.0.1:2181
 prd_dashboard  # dashboard 名称
 prd_proxy      # proxy 名称
+POD_IP         # K8S 中获取 POD IP
+
+          env:
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
 
 ```
 

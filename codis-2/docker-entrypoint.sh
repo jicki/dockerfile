@@ -12,6 +12,7 @@ echo "zk : ${coord_list}"
 echo "product : ${prd_name}"
 echo "password : ${prd_auth}"
 echo "dashboard_name : ${prd_dashboard}"
+echo "POD IP : ${POD_IP}"
 
 cat > /opt/local/codis/config/config.ini << EOF
 ##################################################
@@ -43,7 +44,7 @@ echo "dashboard config file"
 cat /opt/local/codis/config/config.ini
 echo "-------------------------------------------------------------------------------"
 
-CMD="/opt/local/codis/bin/codis-config -c /opt/local/codis/config/config.ini -L /opt/local/codis/logs/dashboard.log dashboard --addr=0.0.0.0:18087"
+CMD="/opt/local/codis/bin/codis-config -c /opt/local/codis/config/config.ini -L /opt/local/codis/logs/dashboard.log dashboard --addr=${POD_IP}:18087 --http-log=/opt/local/codis/logs/requests.log"
 
 elif [ $CODIS_TYPE = "codis_proxy" ];
 then
@@ -54,6 +55,7 @@ echo "product : ${prd_name}"
 echo "password : ${prd_auth}"
 echo "proxy_id : ${prd_proxy}" 
 echo "dashboard_name : ${prd_dashboard}"
+echo "POD IP : ${POD_IP}"
 
 cat > /opt/local/codis/config/config.ini << EOF
 ##################################################
@@ -85,7 +87,7 @@ echo "------------------------------proxy config file---------------------------
 cat /opt/local/codis/config/config.ini
 echo "-------------------------------------------------------------------------------"
 
-CMD="/opt/local/codis/bin/codis-proxy --log-level info -c /opt/local/codis/config/config.ini -L /opt/local/codis/logs/proxy.log  --cpu=4 --addr=0.0.0.0:19000 --http-addr=0.0.0.0:11000"
+CMD="/opt/local/codis/bin/codis-proxy --log-level info -c /opt/local/codis/config/config.ini -L /opt/local/codis/logs/proxy.log  --cpu=4 --addr=${POD_IP}:19000 --http-addr=${POD_IP}:11000"
 
 elif [ $CODIS_TYPE = "codis_server" ];
 then

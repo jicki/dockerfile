@@ -1,4 +1,4 @@
-FROM centos-golang:1.7
+FROM 172.16.1.59/library/golang:1.7
 
 MAINTAINER jicki
 
@@ -9,7 +9,7 @@ ENV MAXMEMORY 1gb
 
 RUN set -ex \
         && cd $GOPATH/src/github.com/CodisLabs \
-        && git clone https://github.com/CodisLabs/codis.git -b release2.0 \
+        && git clone https://git.coding.net/jicki/codis.git -b release2.0 \
         && cd $GOPATH/src/github.com/CodisLabs/codis && make && make -j -C extern/redis-2.8.21/ \
         && mkdir -p /opt/local/codis/{bin,logs,data,config}/ \
         && cp -rf $GOPATH/src/github.com/CodisLabs/codis/bin/* /opt/local/codis/bin
