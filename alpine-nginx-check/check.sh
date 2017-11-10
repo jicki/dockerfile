@@ -1,6 +1,6 @@
 #!/bin/bash
 
-confmd5=`md5sum /etc/nginx/nginx.conf|awk {'print $1'}`
+confmd5=`md5sum /etc/nginx/conf/nginx.conf|awk {'print $1'}`
 
 reloadmd5=`cat /tmp/md5.txt`
 
