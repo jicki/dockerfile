@@ -21,7 +21,7 @@ docker run -d -v .nginx.conf:/etc/nginx/nginx.conf nginx
 # 思路
 
 
-可自动将 nginx.conf 放到 git 中。
+可自行将 nginx.conf 放到 git 中。
 
 
 check 脚本，可更改为 先 git pull ，然后再执行 check
