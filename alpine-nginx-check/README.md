@@ -5,9 +5,15 @@
 
 
 ```
+nginx.conf  path /etcd/nginx/conf/nginx.conf
+
+
+```
+
+```
 # docker
 
-docker run -d -v .nginx.conf:/etc/nginx/nginx.conf nginx
+docker run -d -v .nginx.conf:/etc/nginx/conf/nginx.conf nginx
 
 
 # kubernetes

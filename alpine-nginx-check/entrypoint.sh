@@ -2,4 +2,4 @@
 
 crond -l 8 -L /tmp/cron.log
 
-nginx -g 'daemon off;'
+nginx -c /etc/nginx/conf/nginx.conf -g 'daemon off;'
