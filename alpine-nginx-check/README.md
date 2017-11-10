@@ -19,12 +19,14 @@ nginx.conf  path /etc/nginx/conf/nginx.conf
 ```
 # docker
 
-docker run -d -v .nginx.conf:/etc/nginx/conf/nginx.conf nginx
+docker run -d -v .nginx.conf:/etc/nginx/conf/nginx.conf jicki/nginx:check
 
 
 # kubernetes
 
 使用 configmap 挂载到 deployment , rc 中。
+
+configmap  更新以后， pod 中 config 更新需要一点时间，不是实时更新
 
 
 ```
