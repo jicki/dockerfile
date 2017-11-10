@@ -5,6 +5,12 @@
 
 
 ```
+docker pull jicki/nginx:check
+
+
+```
+
+```
 nginx.conf  path /etcd/nginx/conf/nginx.conf
 
 
