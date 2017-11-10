@@ -31,7 +31,10 @@ docker run -d -v .nginx.conf:/etc/nginx/conf/nginx.conf nginx
 
 
 ## kubernetes 例子
-nd: ConfigMap
+
+```
+---
+kind: ConfigMap
 apiVersion: v1
 metadata:
   name: nginx-config
@@ -101,7 +104,7 @@ data:
             root   /usr/share/nginx/html;
             index  index.html index.htm;
          }
-        # error code
+        # error ststus
         error_page   500 502 503 504  /50x.html;
         location = /50x.html {
             root   /usr/share/nginx/html;
@@ -168,9 +171,6 @@ spec:
       - backend:
           serviceName: nginx-svc
           servicePort: 80
-
-```
-
 
 ```
 
