@@ -11,7 +11,7 @@ docker pull jicki/nginx:check
 ```
 
 ```
-nginx.conf  path /etcd/nginx/conf/nginx.conf
+nginx.conf  path /etc/nginx/conf/nginx.conf
 
 
 ```
