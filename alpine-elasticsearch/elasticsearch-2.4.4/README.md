@@ -8,11 +8,11 @@ docker run -d --name elasticsearch -p 9200:9200 elasticsearch
 
 #集群启动 集群必须配置 hostname (-h), master_minimum 等于 master 个数
 
-docker run -d --name elasticsearch-1 -h elasticsearch-1 -e cluster_name=elasticsearch -e node_name=node-1 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
+docker run -d --name elasticsearch-1 -h elasticsearch-1 -e cluster_name=elasticsearch -e ES_JAVA_OPTS=-Xms512m -Xmx512m -e node_name=node-1 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
 
-docker run -d --name elasticsearch-2 -h elasticsearch-2 -e cluster_name=elasticsearch -e node_name=node-2 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
+docker run -d --name elasticsearch-2 -h elasticsearch-2 -e cluster_name=elasticsearch -e ES_JAVA_OPTS=-Xms512m -Xmx512m -e node_name=node-2 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
 
-docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elasticsearch -e node_name=node-3 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
+docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elasticsearch -e ES_JAVA_OPTS=-Xms512m -Xmx512m -e node_name=node-3 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
 
 ```
 
@@ -35,6 +35,7 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 - node_name=node-1
                 - master_minimum=3
                 - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
+                - ES_JAVA_OPTS=-Xms512m -Xmx512m
                 volumes:
                 - /opt/upload/elasticsearch-1/data:/usr/share/elasticsearch/data
                 - /opt/upload/elasticsearch-1/logs:/usr/share/elasticsearch/logs
@@ -52,6 +53,7 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 - node_name=node-2
                 - master_minimum=3
                 - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
+                - ES_JAVA_OPTS=-Xms512m -Xmx512m
                 volumes:
                 - /opt/upload/elasticsearch-2/data:/usr/share/elasticsearch/data
                 - /opt/upload/elasticsearch-2/logs:/usr/share/elasticsearch/logs
@@ -69,6 +71,7 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 - node_name=node-3
                 - master_minimum=3
                 - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
+                - ES_JAVA_OPTS=-Xms512m -Xmx512m
                 volumes:
                 - /opt/upload/elasticsearch-3/data:/usr/share/elasticsearch/data
                 - /opt/upload/elasticsearch-3/logs:/usr/share/elasticsearch/logs
