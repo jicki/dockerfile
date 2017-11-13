@@ -1,23 +1,37 @@
 
+# 设置 vm.max_map_count
+
+```
+#系统默认 vm.max_map_count 为 65530 必须设置大于等于 262144
+
+vi /etc/sysctl.conf
+
+vm.max_map_count = 262144
+
+
+# 执行 
+
+sysctl -p
+
+
+```
+
+
+
 # 单机运行
 
 ```
-# WEB 默认帐号admin  密码 moxian
-
 docker run -d --name elasticsearch -p 9200:9200 elasticsearch 
 
 
-# 设置密码
-docker run -d --name elasticsearch -e web_user=jicki -e web_passwd=jicki -p 9200:9200 elasticsearch
 
+#集群启动 集群必须配置 hostname (-h), master_minimum 等于 master 个数
 
-#集群启动 集群必须配置 hostname (-h) master_minimum 等于 master 个数
+docker run -d --name elasticsearch-1 -h elasticsearch-1 -e cluster_name=elasticsearch -e ES_JAVA_OPTS="-Xms512m -Xmx512m" -e node_name=node-1 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
 
-docker run -d --name elasticsearch-1 -h elasticsearch-1 -e cluster_name=elasticsearch -e node_name=node-1 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e web_user=jicki -e web_passwd=jicki -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
+docker run -d --name elasticsearch-2 -h elasticsearch-2 -e cluster_name=elasticsearch -e ES_JAVA_OPTS="-Xms512m -Xmx512m" -e node_name=node-2 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
 
-docker run -d --name elasticsearch-2 -h elasticsearch-2 -e cluster_name=elasticsearch -e node_name=node-2 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e web_user=jicki -e web_passwd=jicki -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
-
-docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elasticsearch -e node_name=node-3 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e web_user=jicki -e web_passwd=jicki -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
+docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elasticsearch -e ES_JAVA_OPTS="-Xms512m -Xmx512m" -e node_name=node-3 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
 
 ```
 
@@ -38,10 +52,10 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 environment:
                 - cluster_name=elasticsearch
                 - node_name=node-1
-                - web_user=jicki
-                - web_passwd=jicki
-		- master_minimum=3
+                - master_minimum=3
                 - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
+                - ES_JAVA_OPTS="-Xms512m -Xmx512m"
+                - bootstrap.memory_lock=true
                 volumes:
                 - /opt/upload/elasticsearch-1/data:/usr/share/elasticsearch/data
                 - /opt/upload/elasticsearch-1/logs:/usr/share/elasticsearch/logs
@@ -57,10 +71,10 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 environment:
                 - cluster_name=elasticsearch
                 - node_name=node-2
-                - web_user=jicki
-                - web_passwd=jicki
                 - master_minimum=3
                 - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
+                - ES_JAVA_OPTS="-Xms512m -Xmx512m"
+                - bootstrap.memory_lock=true
                 volumes:
                 - /opt/upload/elasticsearch-2/data:/usr/share/elasticsearch/data
                 - /opt/upload/elasticsearch-2/logs:/usr/share/elasticsearch/logs
@@ -76,10 +90,10 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 environment:
                 - cluster_name=elasticsearch
                 - node_name=node-3
-                - web_user=jicki
-                - web_passwd=jicki
                 - master_minimum=3
                 - cluster_list="elasticsearch-1","elasticsearch-2","elasticsearch-3"
+                - ES_JAVA_OPTS="-Xms512m -Xmx512m"
+                - bootstrap.memory_lock=true
                 volumes:
                 - /opt/upload/elasticsearch-3/data:/usr/share/elasticsearch/data
                 - /opt/upload/elasticsearch-3/logs:/usr/share/elasticsearch/logs

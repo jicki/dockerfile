@@ -1,5 +1,10 @@
 FROM openjdk:8-jre-alpine
 
+# update mirrors
+RUN echo "https://mirrors.aliyun.com/alpine/latest-stable/main" > /etc/apk/repositories \
+    && echo "https://mirrors.aliyun.com/alpine/latest-stable/community" >> /etc/apk/repositories \
+    && apk update
+
 # ensure elasticsearch user exists
 RUN addgroup -S elasticsearch && adduser -S -G elasticsearch elasticsearch
 
@@ -13,10 +18,10 @@ ENV GPG_KEY 46095ACC8548582C1A2699A9D27D666CD88E42B4
 WORKDIR /usr/share/elasticsearch
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
-ENV ELASTICSEARCH_VERSION 1.7.6
-ENV ELASTICSEARCH_TARBALL="https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.6.tar.gz" \
-	ELASTICSEARCH_TARBALL_ASC="" \
-	ELASTICSEARCH_TARBALL_SHA1="0b6ec9fe34b29e6adc4d8481630bf1f69cb04aa9"
+ENV ELASTICSEARCH_VERSION 5.5.1
+ENV ELASTICSEARCH_TARBALL="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.1.tar.gz" \
+	ELASTICSEARCH_TARBALL_ASC="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.1.tar.gz.asc" \
+	ELASTICSEARCH_TARBALL_SHA1="cb5648a6723527bdccee98caef7a9d08885a5b0f"
 
 RUN set -ex; \
 	\
@@ -36,9 +41,9 @@ RUN set -ex; \
 	if [ "$ELASTICSEARCH_TARBALL_ASC" ]; then \
 		wget -O elasticsearch.tar.gz.asc "$ELASTICSEARCH_TARBALL_ASC"; \
 		export GNUPGHOME="$(mktemp -d)"; \
-		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY"; \
+		gpg --keyserver keyserver.ubuntu.com --recv-keys "$GPG_KEY"; \
 		gpg --batch --verify elasticsearch.tar.gz.asc elasticsearch.tar.gz; \
-		rm -r "$GNUPGHOME" elasticsearch.tar.gz.asc; \
+		rm -rf "$GNUPGHOME" elasticsearch.tar.gz.asc; \
 	fi; \
 	\
 	tar -xf elasticsearch.tar.gz --strip-components=1; \
@@ -57,6 +62,8 @@ RUN set -ex; \
 		chown -R elasticsearch:elasticsearch "$path"; \
 	done; \
 	\
+# we shouldn't need much RAM to test --version (default is 2gb, which gets Jenkins in trouble sometimes)
+	export ES_JAVA_OPTS='-Xms32m -Xmx32m'; \
 	if [ "${ELASTICSEARCH_VERSION%%.*}" -gt 1 ]; then \
 		elasticsearch --version; \
 	else \
@@ -67,12 +74,9 @@ RUN set -ex; \
 
 COPY config ./config
 
-ADD plugins.tar.gz ./plugins 
-
 VOLUME /usr/share/elasticsearch/data
 
 COPY docker-entrypoint.sh /
-
 RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 9200 9300

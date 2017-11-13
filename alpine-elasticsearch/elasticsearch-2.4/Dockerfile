@@ -1,5 +1,10 @@
 FROM openjdk:8-jre-alpine
 
+# update mirrors
+RUN echo "https://mirrors.aliyun.com/alpine/latest-stable/main" > /etc/apk/repositories \
+    && echo "https://mirrors.aliyun.com/alpine/latest-stable/community" >> /etc/apk/repositories \
+    && apk update
+
 # ensure elasticsearch user exists
 RUN addgroup -S elasticsearch && adduser -S -G elasticsearch elasticsearch
 
@@ -13,10 +18,10 @@ ENV GPG_KEY 46095ACC8548582C1A2699A9D27D666CD88E42B4
 WORKDIR /usr/share/elasticsearch
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
-ENV ELASTICSEARCH_VERSION 2.4.4
-ENV ELASTICSEARCH_TARBALL="https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.4.4.tar.gz" \
-	ELASTICSEARCH_TARBALL_ASC="https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.4.4.tar.gz.asc" \
-	ELASTICSEARCH_TARBALL_SHA1="cdb5068d1baa07388e522c3bc04cca38aa8f3048"
+ENV ELASTICSEARCH_VERSION 2.4.6
+ENV ELASTICSEARCH_TARBALL="https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.4.6.tar.gz" \
+	ELASTICSEARCH_TARBALL_ASC="https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.4.6.tar.gz.asc" \
+	ELASTICSEARCH_TARBALL_SHA1="c3441bef89cd91206edf3cf3bd5c4b62550e60a9"
 
 RUN set -ex; \
 	\
@@ -38,7 +43,7 @@ RUN set -ex; \
 		export GNUPGHOME="$(mktemp -d)"; \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY"; \
 		gpg --batch --verify elasticsearch.tar.gz.asc elasticsearch.tar.gz; \
-		rm -r "$GNUPGHOME" elasticsearch.tar.gz.asc; \
+		rm -rf "$GNUPGHOME" elasticsearch.tar.gz.asc; \
 	fi; \
 	\
 	tar -xf elasticsearch.tar.gz --strip-components=1; \
@@ -57,6 +62,8 @@ RUN set -ex; \
 		chown -R elasticsearch:elasticsearch "$path"; \
 	done; \
 	\
+# we shouldn't need much RAM to test --version (default is 2gb, which gets Jenkins in trouble sometimes)
+	export ES_JAVA_OPTS='-Xms32m -Xmx32m'; \
 	if [ "${ELASTICSEARCH_VERSION%%.*}" -gt 1 ]; then \
 		elasticsearch --version; \
 	else \
@@ -65,21 +72,11 @@ RUN set -ex; \
 		elasticsearch -v; \
 	fi
 
-# install plugin
-
-RUN set -ex; \
-	\
-	plugin install license \
-	&& plugin install royrusso/elasticsearch-HQ \
-	&& plugin install mobz/elasticsearch-head \
-	&& plugin install marvel-agent
-
 COPY config ./config
 
 VOLUME /usr/share/elasticsearch/data
 
 COPY docker-entrypoint.sh /
-
 RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 9200 9300
