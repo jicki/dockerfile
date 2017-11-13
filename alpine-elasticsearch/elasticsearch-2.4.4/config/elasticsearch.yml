@@ -386,5 +386,5 @@
 marvel.agent.enabled: false
 http.basic.enabled: true
 http.basic.user: admin
-http.basic.password: moxian
+http.basic.password: admin
 action.auto_create_index: false
