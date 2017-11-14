@@ -17,6 +17,35 @@ sysctl -p
 ```
 
 
+# head 插件
+
+
+```
+# 开启 head 插件 必须配置 http_cors_enabled 
+
+
+# 默认 http.cors.allow-origin: "*" 
+
+
+docker run -d -e http_cors_enabled=1  为开启 ，env 非空既可。
+
+
+# 同一集群下 docker 需要运行 elasticseaech-head 容器
+
+
+docker run -p 9100:9100 jicki/elasticsearch-head:5
+
+
+
+# 使用 http://elasticsearch:9200/_plugin/head/ 访问
+
+
+```
+
+
+
+
+
 
 # 单机运行
 
@@ -24,8 +53,14 @@ sysctl -p
 docker run -d --name elasticsearch -p 9200:9200 elasticsearch 
 
 
+```
 
-#集群启动 集群必须配置 hostname (-h), master_minimum 等于 master 个数
+
+# 单机伪集群
+
+```
+
+# 集群启动 集群必须配置 hostname (-h), master_minimum 等于 master 个数
 
 docker run -d --name elasticsearch-1 -h elasticsearch-1 -e cluster_name=elasticsearch -e ES_JAVA_OPTS="-Xms512m -Xmx512m" -e node_name=node-1 -e cluster_list='"elasticsearch-1","elasticsearch-2","elasticsearch-3"' -e master_minimum=3 --net=overlay -p 9200:9200 elasticsearch
 
@@ -36,7 +71,7 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
 ```
 
 
-# 集群部署
+# 集群部署 
 
 ```
 # docker-compose  集群必须配置 hostname , 且 hostname 名称必须 集群内可以通信
