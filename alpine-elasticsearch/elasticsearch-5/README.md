@@ -17,34 +17,6 @@ sysctl -p
 ```
 
 
-# head 插件
-
-
-```
-# 开启 head 插件 必须配置 http_cors_enabled 
-
-
-# 默认 http.cors.allow-origin: "*" 
-
-
-docker run -d -e http_cors_enabled=1  为开启 ，env 非空既可。
-
-
-# 同一集群下 docker 需要运行 elasticseaech-head 容器
-
-
-docker run -p 9100:9100 jicki/elasticsearch-head:5
-
-
-
-# 使用 http://elasticsearch:9200/_plugin/head/ 访问
-
-
-```
-
-
-
-
 
 
 # 单机运行

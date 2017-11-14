@@ -28,27 +28,11 @@ echo "----------------ENV------------------------"
         echo "node_name: $node_name"
         echo "cluster_list: $cluster_list" 
         echo "master_minimum: $master_minimum"
-        echo "http_cors_enabled: $http_cors_enabled"
 
 echo "----------------ENV------------------------"
 
 
-if  [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ -n "$master_minimum" ] && [ -n "$http_cors_enabled" ];then
-cat > /usr/share/elasticsearch/config/elasticsearch.yml << EOF
-cluster.name: $cluster_name
-node.name: "$node_name"
-node.master: true
-node.data: true
-network.publish_host: ${HOSTNAME}
-network.host: 0.0.0.0
-discovery.zen.ping.unicast.hosts: [$cluster_list]
-discovery.zen.minimum_master_nodes: $[$master_minimum/2+1]
-action.auto_create_index: false
-http.cors.enabled: true
-http.cors.allow-origin: "*"
-EOF
-
-elif  [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ -n "$master_minimum" ];then
+if  [ -n "$cluster_name" ] && [ -n "$node_name" ] && [ -n "$cluster_list" ] && [ -n "$master_minimum" ];then
 cat > /usr/share/elasticsearch/config/elasticsearch.yml << EOF
 cluster.name: $cluster_name
 node.name: "$node_name"
