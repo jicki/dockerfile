@@ -99,3 +99,69 @@ docker run -d --name elasticsearch-3 -h elasticsearch-3 -e cluster_name=elastics
                 - /opt/upload/elasticsearch-3/logs:/usr/share/elasticsearch/logs
 
 ```
+
+
+# k8s 集群部署
+
+
+
+```
+
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: elasticsearch
+spec:
+  serviceName: "elasticsearch"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: elasticsearch
+          image: jicki/elasticsearch:5
+          env:
+            - name: cluster_name
+              value: elasticsearch
+            - name: node_name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: master_minimum
+              value: "3"
+            - name: cluster_list
+              value: '"elasticsearch-0.elasticsearch","elasticsearch-1.elasticsearch","elasticsearch-2.elasticsearch"'
+            - name: ES_JAVA_OPTS
+              value: '-Xms512m -Xmx512m'
+          ports:
+            - name: http
+              containerPort: 9200
+            - name: transport
+              containerPort: 9300
+          volumeMounts:
+            - name: datadir
+              mountPath: /usr/share/elasticsearch/data
+      volumes:
+        - name: datadir
+          emptyDir: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+spec:
+  ports:
+  - port: 9200
+    name: http
+  - port: 9300
+    name: transport
+  clusterIP: None
+  selector:
+    app: elasticsearch
+
+```
