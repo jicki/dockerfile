@@ -36,10 +36,10 @@ services:
     - 80:80
     volumes:
     - /etc/localtime:/etc/localtime
-    - .logs:/usr/local/apache2/logs
-    - .conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
-    - .conf/httpd-proxy.conf:/usr/local/apache2/conf/extra/httpd-proxy.conf
-    - .conf/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
+    - ./logs:/usr/local/apache2/logs
+    - ./conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
+    - ./conf/httpd-proxy.conf:/usr/local/apache2/conf/extra/httpd-proxy.conf
+    - ./conf/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
     depends_on:
     - httpd-1
     - httpd-2
