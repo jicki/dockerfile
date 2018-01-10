@@ -2,8 +2,8 @@ FROM alpine
 
 # Here we install GNU libc (aka glibc) and set C.UTF-8 locale as default.
 
-RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.5/main" > /etc/apk/repositories \
-    && echo "https://mirrors.ustc.edu.cn/alpine/v3.5/community" >> /etc/apk/repositories \
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.7/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.7/community" >> /etc/apk/repositories \
     && apk update
 
 RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
