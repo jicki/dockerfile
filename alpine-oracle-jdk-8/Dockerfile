@@ -6,8 +6,8 @@ ENV JAVA_VERSION=8 \
     JAVA_PATH=e758a0de34e24606bca991d704f6dcbf \
     JAVA_HOME="/usr/lib/jvm/default-jvm"
 
-RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.5/main" > /etc/apk/repositories \
-    && echo "https://mirrors.ustc.edu.cn/alpine/v3.5/community" >> /etc/apk/repositories \
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.7/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.7/community" >> /etc/apk/repositories \
     && apk update
 
 RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip && \
