@@ -1,9 +1,9 @@
 FROM alpine:glibc
 
 ENV JAVA_VERSION=8 \
-    JAVA_UPDATE=131 \
-    JAVA_BUILD=11 \
-    JAVA_PATH=d54c1d3a095b4ff2b6607d096fa80163 \
+    JAVA_UPDATE=151 \
+    JAVA_BUILD=12 \
+    JAVA_PATH=e758a0de34e24606bca991d704f6dcbf \
     JAVA_HOME="/usr/lib/jvm/default-jvm"
 
 RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.5/main" > /etc/apk/repositories \
