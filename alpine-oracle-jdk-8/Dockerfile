@@ -60,5 +60,5 @@ RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip &
     apk del build-dependencies && \
     rm "/tmp/"*
     
-RUN addgroup -S jicki && adduser -S -g jicki jicki
-USER jicki
+#RUN addgroup -S jicki && adduser -S -g jicki jicki
+#USER jicki
