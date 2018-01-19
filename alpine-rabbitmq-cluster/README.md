@@ -1,0 +1,28 @@
+# RabbitMQ 集群
+
+## docker swarm (1.12 +)
+```
+version: "3.3"
+services:
+  rabbitmq:
+    image: jicki/rabbitmq-swarm
+    hostname: "{{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}"
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=abc
+      - RABBITMQ_USE_LONGNAME=true
+      - RABBITMQ_MNESIA_DIR=/var/lib/rabbitmq/mnesia
+      - RABBITMQ_PLUGINS_EXPAND_DIR=/var/lib/rabbitmq/mnesia/plugins-expand
+      - SERVICE_NAME={{.Service.Name}}
+      - SLOT={{.Task.Slot}}
+      - MASTER_SLOT=1
+    ports:
+      - "5672:5672"   # amqp
+      - "15672:15672" # web ui
+```
