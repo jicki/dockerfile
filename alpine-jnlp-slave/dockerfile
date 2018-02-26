@@ -1,0 +1,9 @@
+FROM jicki/slave:3.16
+
+COPY jenkins-slave /usr/local/bin/jenkins-slave
+
+USER root
+RUN chmod +x /usr/local/bin/jenkins-slave
+
+USER jenkins
+ENTRYPOINT ["jenkins-slave"]
