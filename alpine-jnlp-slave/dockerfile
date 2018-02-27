@@ -5,5 +5,4 @@ COPY jenkins-slave /usr/local/bin/jenkins-slave
 USER root
 RUN chmod +x /usr/local/bin/jenkins-slave
 
-USER jenkins
 ENTRYPOINT ["jenkins-slave"]
