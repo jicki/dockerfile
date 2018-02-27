@@ -1,8 +1,11 @@
 FROM jicki/slave:3.16
 
+USER root
+
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 
-USER root
+RUN apk add git
+
 RUN chmod +x /usr/local/bin/jenkins-slave
 
 ENTRYPOINT ["jenkins-slave"]
