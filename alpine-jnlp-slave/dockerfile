@@ -4,7 +4,8 @@ USER root
 
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 
-RUN apk add git
+# Add git and docker lib
+RUN apk add git libltdl
 
 RUN chmod +x /usr/local/bin/jenkins-slave
 
