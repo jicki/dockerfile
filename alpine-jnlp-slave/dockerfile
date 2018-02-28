@@ -6,7 +6,8 @@ COPY jenkins-slave /usr/local/bin/jenkins-slave
 
 # Add git and docker lib
 RUN apk update \
-    && apk add git libltdl
+    && apk add --no-cache git libltdl py-pip \
+    && pip install docker-compose --no-cache-dir
 
 RUN chmod +x /usr/local/bin/jenkins-slave
 
