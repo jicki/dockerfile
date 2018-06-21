@@ -1,11 +1,11 @@
-FROM alpine:3.5
+FROM alpine:3.7
 
 MAINTAINER jicki "jicki@qq.com"
 
-ENV NGINX_VERSION 1.12.2
+ENV NGINX_VERSION 1.15.0
 
-RUN echo "https://mirrors.aliyun.com/alpine/v3.5/main" > /etc/apk/repositories \
-    && echo "https://mirrors.aliyun.com/alpine/v3.5/community" >> /etc/apk/repositories \
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.7/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.7/community" >> /etc/apk/repositories \
     && apk update
 
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
