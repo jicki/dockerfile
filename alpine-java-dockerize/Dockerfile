@@ -10,6 +10,14 @@ RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.8/main" > /etc/apk/repositories 
     && echo "https://mirrors.ustc.edu.cn/alpine/v3.8/community" >> /etc/apk/repositories \
     && apk update
 
+RUN apk add --no-cache openssl
+
+ENV DOCKERIZE_VERSION v0.6.1
+
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
 RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip && \
     cd "/tmp" && \
     wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
