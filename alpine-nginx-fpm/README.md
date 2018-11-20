@@ -1,6 +1,15 @@
 # Nginx + PHP-FPM
 
 
+## image
+
+```
+
+docker pull jicki/nginx-fpm:7.2
+
+
+```
+
 
 ## Version
 
