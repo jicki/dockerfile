@@ -1,6 +1,6 @@
-FROM alpine:glibc
+FROM jicki/alpine:glibc-3.9
 
-ENV JAVA_VERSION=8 \
+ENV JAVA_VERSION=11 \
     JAVA_UPDATE=181 \
     JAVA_BUILD=13 \
     JAVA_PATH=96a7b8442fe848ef90c96a2fad6ed6d1 \
@@ -9,6 +9,14 @@ ENV JAVA_VERSION=8 \
 RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.8/main" > /etc/apk/repositories \
     && echo "https://mirrors.ustc.edu.cn/alpine/v3.8/community" >> /etc/apk/repositories \
     && apk update
+
+RUN apk add --no-cache openssl
+
+ENV DOCKERIZE_VERSION v0.6.1
+
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip && \
     cd "/tmp" && \
