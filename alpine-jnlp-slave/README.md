@@ -6,6 +6,13 @@
 JAVA_HOME = /usr/lib/jvm/default-jvm
 ```
 
+## open jdk
+
+```
+# java version 1.8.0_212
+
+JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
+```
 
 ## Gradle
 
@@ -15,6 +22,15 @@ JAVA_HOME = /usr/lib/jvm/default-jvm
 GRADLE_HOME = /opt/gradle
 ```
 
+
+## Maven
+
+```
+
+# maven version 3.6
+
+MAVEN_HOME /usr/share/maven
+```
 
 ## jnlp-slave 下载
 

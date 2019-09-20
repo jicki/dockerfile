@@ -1,4 +1,4 @@
-FROM jicki/slave:3.16
+FROM jicki/slave:3.35
 
 USER root
 
@@ -6,8 +6,7 @@ COPY jenkins-slave /usr/local/bin/jenkins-slave
 
 # Add git and docker lib
 RUN apk update \
-    && apk add --no-cache git libltdl py-pip \
-    && pip install docker-compose --no-cache-dir
+    && apk add --no-cache git libltdl
 
 RUN chmod +x /usr/local/bin/jenkins-slave
 

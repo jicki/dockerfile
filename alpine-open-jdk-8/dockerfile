@@ -3,8 +3,8 @@ ENV LANG C.UTF-8
 
 USER root
 
-RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.4/main" > /etc/apk/repositories \
-    && echo "https://mirrors.ustc.edu.cn/alpine/v3.4/community" >> /etc/apk/repositories \
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.10/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.10/community" >> /etc/apk/repositories \
     && apk update
 	
 RUN \

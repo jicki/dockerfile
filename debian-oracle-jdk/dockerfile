@@ -44,7 +44,7 @@ RUN set -ex \
     && curl -sSL ${TINI_DOWNLOAD_URL} > /usr/bin/tini \
     && chmod +x /usr/bin/tini \
     && cd /tmp \  
-    && wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" ${JAVA_DOWNLOAD_URL} \
+    && curl -jkL -H "Cookie: oraclelicense=accept-securebackup-cookie" ${JAVA_DOWNLOAD_URL} -o jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz \
     && tar -xzf jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz \
     && mkdir -p /usr/lib/jvm \
     && mv jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE} /usr/lib/jvm/java-${JAVA_VERSION}-oracle \
