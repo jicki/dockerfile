@@ -1,4 +1,4 @@
-FROM jicki/gradle:4.5
+FROM jicki/gradle:5.6
 
 ENV HOME /home/jenkins
 RUN addgroup -S -g 10000 jenkins

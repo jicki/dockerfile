@@ -17,7 +17,7 @@ JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
 ## Gradle
 
 ```
-# gradle version 4.5 or 3.2.1
+# gradle version 5.6.2 or 4.5 or 3.2.1
 
 GRADLE_HOME = /opt/gradle
 ```
@@ -43,5 +43,9 @@ jicki/jenkins-jnlp:gradle3.2
 
 # gralde 4.5  # 包含 docker-compose git 运行用户为 root
 
-jicki/jenkins-jnlp
+jicki/jenkins-jnlp:gradle4.5
+
+# gradle 5.6.2 
+
+jicki/jenkins-jnlp:gradle5.6
 ```

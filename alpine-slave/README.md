@@ -10,6 +10,7 @@ jicki/oracle-jdk:8
 ```
 jicki/gradle:3.2.1
 jicki/gradle:4.5
+jicki/gradle:5.6
 ```
 
 * maven
@@ -22,6 +23,6 @@ jicki/maven:3.6
 ```
 jicki/slave:gradle3.2
 
-# 如下默认 gradle 4.5
+# 如下默认 gradle 5.6
 jicki/slave:3.35
 ```

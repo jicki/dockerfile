@@ -1,0 +1,22 @@
+FROM jicki/openjdk:8
+
+ENV GRADLE_VERSION=5.6.2
+ENV GRADLE_HOME=/opt/gradle
+ENV GRADLE_FOLDER=/root/.gradle
+
+# Change to tmp folder
+WORKDIR /tmp
+
+# Download and extract gradle to opt folder
+RUN wget https://downloads.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && unzip gradle-${GRADLE_VERSION}-bin.zip -d /opt \
+    && ln -s /opt/gradle-${GRADLE_VERSION} /opt/gradle \
+    && rm -f gradle-${GRADLE_VERSION}-bin.zip \
+    && ln -s /opt/gradle/bin/gradle /usr/bin/gradle \
+    && apk add libstdc++
+
+# Create .gradle folder
+RUN mkdir -p $GRADLE_FOLDER
+
+# Mark as volume
+VOLUME  $GRADLE_FOLDER
