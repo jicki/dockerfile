@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:glibc
 ENV LANG C.UTF-8
 
 USER root
