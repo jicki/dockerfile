@@ -1,4 +1,4 @@
-FROM jicki/maven:3.6
+FROM jicki/oracle-maven:3.6
 
 ENV HOME /home/jenkins
 RUN addgroup -S -g 10000 jenkins
@@ -16,7 +16,6 @@ RUN curl --create-dirs -sSLo /usr/share/jenkins/slave.jar https://repo.jenkins-c
   && chmod 644 /usr/share/jenkins/slave.jar \
   && apk del .build-deps
 
-USER jenkins
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
 RUN mkdir /home/jenkins/.jenkins && mkdir -p ${AGENT_WORKDIR}
 

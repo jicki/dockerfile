@@ -1,7 +1,7 @@
 ## oracle jdk
 
 ```
-# java version 1.8.161
+# java version 1.8.161 && 1.8.221
 
 JAVA_HOME = /usr/lib/jvm/default-jvm
 ```
@@ -48,4 +48,8 @@ jicki/jenkins-jnlp:gradle4.5
 # gradle 5.6.2 
 
 jicki/jenkins-jnlp:gradle5.6
+
+
+# maven 3.6
+jicki/jenkins-jnlp:oracle-maven3.6
 ```

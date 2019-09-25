@@ -1,4 +1,4 @@
-FROM jicki/slave:oracle-maven3.6
+FROM jicki/slave:3.35
 
 USER root
 
@@ -7,7 +7,7 @@ COPY jenkins-slave /usr/local/bin/jenkins-slave
 # Add git and docker lib
 RUN apk update \
     && apk add --no-cache git libltdl py-pip python-dev libffi-dev openssl-dev gcc libc-dev make \
-    && pip install -i https://pypi.tuna.tsinghua.edu.cn/simple docker-compose --no-cache-dir
+    && pip install docker-compose --no-cache-dir
 
 RUN chmod +x /usr/local/bin/jenkins-slave
 

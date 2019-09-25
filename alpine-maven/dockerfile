@@ -1,4 +1,4 @@
-FROM jicki/openjdk:8
+FROM jicki/java:alpine-oracle-8
 
 ARG MAVEN_VERSION=3.6.2
 ARG USER_HOME_DIR="/root"
