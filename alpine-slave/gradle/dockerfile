@@ -1,11 +1,11 @@
-FROM jicki/gradle:5.6
+FROM jicki/gradle:3.2.1
 
 ENV HOME /home/jenkins
 RUN addgroup -S -g 10000 jenkins
 RUN adduser -D -S -G jenkins -u 10000 jenkins
-LABEL Description="This is a base image, which provides the Jenkins agent executable (slave.jar)" Vendor="Jenkins project" Version="3.35"
+LABEL Description="This is a base image, which provides the Jenkins agent executable (slave.jar)" Vendor="Jenkins project" Version="3.36"
 
-ARG VERSION=3.35
+ARG VERSION=3.36
 ARG AGENT_WORKDIR=/home/jenkins/agent
 
 RUN apk add --no-cache --virtual .build-deps \
