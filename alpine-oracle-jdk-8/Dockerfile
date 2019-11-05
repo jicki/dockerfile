@@ -4,7 +4,7 @@ ARG TZ="Asia/Shanghai"
 ARG JAVA_GC_LOG="/var/log/jvmgc.log" 
 
 ENV JAVA_VERSION 8
-ENV JAVA_UPDATE 221
+ENV JAVA_UPDATE 231
 ENV LANGUAGE en_US:en
 ENV JAVA_HOME /usr/lib/jvm/default-jvm
 ENV TZ ${TZ}
@@ -26,7 +26,7 @@ ENV JAVA_OPTS   -Djava.security.egd=file:/dev/./urandom \
                 ${JAVA_OPTS}
 
 COPY docker-java-home /usr/bin/docker-java-home
-COPY jdk-8u221-linux-x64.tar.gz /tmp/
+COPY jdk-8u231-linux-x64.tar.gz /tmp/
 COPY jce_policy-8.zip /tmp/
 
 RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.10/main" > /etc/apk/repositories \ 

@@ -1,6 +1,6 @@
-FROM jicki/oracle-jdk:8
+FROM jicki/java:alpine-oracle-8
 
-ENV GRADLE_VERSION=4.5
+ENV GRADLE_VERSION=3.2.1
 ENV GRADLE_HOME=/opt/gradle
 ENV GRADLE_FOLDER=/root/.gradle
 
@@ -9,7 +9,6 @@ WORKDIR /tmp
 
 # Download and extract gradle to opt folder
 RUN wget https://downloads.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
-    && mkdir /opt \
     && unzip gradle-${GRADLE_VERSION}-bin.zip -d /opt \
     && ln -s /opt/gradle-${GRADLE_VERSION} /opt/gradle \
     && rm -f gradle-${GRADLE_VERSION}-bin.zip \
