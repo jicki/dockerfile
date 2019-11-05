@@ -11,4 +11,4 @@ RUN apk update \
 
 RUN chmod +x /usr/local/bin/jenkins-slave
 
-ENTRYPOINT ["jenkins-slave"]
+ENTRYPOINT ["tini", "--", "jenkins-slave"]
