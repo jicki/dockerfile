@@ -1,0 +1,13 @@
+FROM odavid/jenkins-jnlp-slave
+
+RUN echo "https://mirrors.ustc.edu.cn/alpine/v3.9/main" > /etc/apk/repositories \
+    && echo "https://mirrors.ustc.edu.cn/alpine/v3.9/community" >> /etc/apk/repositories \
+    && apk update
+
+RUN apk add --no-cache npm yarn \
+    && usermod -u 100 jenkins \
+    && groupmod -g 101 jenkins \
+    && mkdir -p /home/jenkins/.npm/npm_cache \
+    && mkdir -p /home/jenkins/.yarn/yarn_cache \
+    && yarn config set cache-folder /home/jenkins/.yarn/yarn_cache \
+    && npm config set cache /home/jenkins/.npm/npm_cache
