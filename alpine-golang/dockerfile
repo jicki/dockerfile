@@ -40,8 +40,6 @@ RUN set -ex \
 
 COPY --from=builder /go/hello/hello /app/
 
-RUN ls -lt /app/hello
-
 EXPOSE 8888
 
 ENTRYPOINT ["/app/hello"]
