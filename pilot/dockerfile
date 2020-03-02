@@ -1,0 +1,6 @@
+FROM registry.cn-hangzhou.aliyuncs.com/acs/log-pilot:0.9.7-filebeat
+
+
+RUN rm -rf /pilot/filebeat.tpl
+
+COPY filebeat.tpl /pilot

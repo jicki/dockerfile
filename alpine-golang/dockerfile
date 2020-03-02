@@ -1,0 +1,47 @@
+FROM golang:1.14.0-alpine3.11 AS builder
+
+
+ENV GOPROXY https://goproxy.cn
+ENV GOSUMDB sum.golang.google.cn
+ENV SRC_PATH ${GOPATH}/hello
+
+WORKDIR ${SRC_PATH}
+
+COPY . .
+
+RUN echo http://mirrors.aliyun.com/alpine/v3.11/main/ > /etc/apk/repositories \
+    && echo http://mirrors.aliyun.com/alpine/v3.11/community/ >> /etc/apk/repositories
+RUN apk update && apk upgrade
+
+RUN set -ex \
+    && apk add git tar \
+    && go mod init hello\
+    && go mod download \
+    && CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -o hello .
+
+FROM alpine:3.11 AS final
+
+ARG TZ="Asia/Shanghai"
+
+ENV TZ ${TZ}
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+ENV LANGUAGE en_US:en
+
+RUN echo http://mirrors.aliyun.com/alpine/v3.11/main/ > /etc/apk/repositories \
+    && echo http://mirrors.aliyun.com/alpine/v3.11/community/ >> /etc/apk/repositories
+RUN apk update && apk upgrade
+
+RUN set -ex \
+    && apk add bash tzdata \
+    && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
+    && echo ${TZ} > /etc/timezone \
+    && rm -rf /var/cache/apk/*
+
+COPY --from=builder /go/hello/hello /app/
+
+RUN ls -lt /app/hello
+
+EXPOSE 8888
+
+ENTRYPOINT ["/app/hello"]
